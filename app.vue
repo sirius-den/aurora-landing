@@ -1,13 +1,6 @@
 <template>
   <div class="overflow-hidden bg-black text-white relative">
-    <!-- Centered background with fixed width -->
-    <div class="fixed inset-0 z-0 flex justify-center">
-      <div class="relative max-w-6xl w-full h-full">
-        <div class="parallax-layer" data-depth="0.05">
-          <div class="absolute inset-0 bg-cover bg-center opacity-50" style="background-image: url('/images/stars-bg.jpg');"></div>
-        </div>
-      </div>
-    </div>
+
     
     <!-- Site Header -->
     <header class="fixed top-0 left-0 right-0 z-40 py-4 bg-black/80 backdrop-blur-sm">
