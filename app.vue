@@ -207,27 +207,46 @@ function openModal(type) {
   modalType.value = type
   modalOpen.value = true
   document.body.classList.add('overflow-hidden')
+  
+  // Update URL with hash parameter
+  window.history.pushState({}, '', `#${type}`)
 }
 
 function closeModal() {
   modalOpen.value = false
   document.body.classList.remove('overflow-hidden')
+  
+  // Remove hash from URL
+  if (window.location.hash) {
+    window.history.pushState({}, '', window.location.pathname)
+  }
 }
 
-// SEO configuration
-useHead({
-  title: 'Aurora Way Studios - Immersive Gaming Experiences',
-  meta: [
-    { name: 'description', content: 'Aurora Way Studios creates immersive narrative gaming experiences across multiple platforms. Explore our collection of sci-fi, fantasy, and adventure games.' },
-    { name: 'keywords', content: 'game studio, indie games, narrative games, sci-fi games, interactive fiction' },
-    { property: 'og:title', content: 'Aurora Way Studios - Immersive Gaming Experiences' },
-    { property: 'og:description', content: 'Discover immersive narrative gaming experiences crafted by Aurora Way Studios.' },
-    { property: 'og:type', content: 'website' }
-  ]
-})
-
-// Parallax effect and star animations
+// Check URL hash on page load
 onMounted(() => {
+  // Check if URL has hash and open corresponding modal
+  if (window.location.hash) {
+    const hash = window.location.hash.substring(1) // Remove the # symbol
+    if (hash === 'terms' || hash === 'privacy') {
+      openModal(hash)
+    }
+  }
+  
+  // Handle browser back/forward navigation
+  window.addEventListener('popstate', () => {
+    if (window.location.hash) {
+      const hash = window.location.hash.substring(1)
+      if (hash === 'terms' || hash === 'privacy') {
+        modalType.value = hash
+        modalOpen.value = true
+        document.body.classList.add('overflow-hidden')
+      }
+    } else if (modalOpen.value) {
+      modalOpen.value = false
+      document.body.classList.remove('overflow-hidden')
+    }
+  })
+
   // Parallax handler
   const handleParallax = () => {
     const scrollY = window.scrollY
@@ -281,6 +300,18 @@ onMounted(() => {
   onUnmounted(() => {
     window.removeEventListener('scroll', handleParallax)
   })
+})
+
+// SEO configuration
+useHead({
+  title: 'Aurora Way Studios - Immersive Gaming Experiences',
+  meta: [
+    { name: 'description', content: 'Aurora Way Studios creates immersive narrative gaming experiences across multiple platforms. Explore our collection of sci-fi, fantasy, and adventure games.' },
+    { name: 'keywords', content: 'game studio, indie games, narrative games, sci-fi games, interactive fiction' },
+    { property: 'og:title', content: 'Aurora Way Studios - Immersive Gaming Experiences' },
+    { property: 'og:description', content: 'Discover immersive narrative gaming experiences crafted by Aurora Way Studios.' },
+    { property: 'og:type', content: 'website' }
+  ]
 })
 </script>
 
